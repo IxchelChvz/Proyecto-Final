@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 // Load environment variables from a .env file if needed
 const MONGODB_URI = process.env.MONGODB_URI;
            
-const DB_NAME = 'clase';
+const DB_NAME = 'proyecto';
 
 let client;
 let db;

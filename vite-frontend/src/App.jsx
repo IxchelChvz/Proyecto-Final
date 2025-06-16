@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Appbar from '../layouts/navBar'
+import MostrarProductos from './components/StackProductos'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -8,6 +9,7 @@ function App() {
   return (
     <>
       <Appbar/>
+      <MostrarProductos/>
     </>
   )
 }

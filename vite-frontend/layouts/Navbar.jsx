@@ -8,7 +8,7 @@ const Appbar = () => {
         <AppBar primary={"light"}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            ChefStock 
+            ChefStock 👨‍🍳
           </Typography>
         </Toolbar>
       </AppBar>
