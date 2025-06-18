@@ -1,7 +1,6 @@
-import React, { use, useState } from "react";
-import { Typography, Button, TextField, Card, CardActions, CardContent, MenuItem } from '@mui/material';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Select from '@mui/material/Select';
+import { useState } from "react";
+import { Typography, Button, TextField, Card, CardActions, CardContent, MenuItem, IconButton, Snackbar } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const unidades = [
     {
@@ -48,6 +47,7 @@ const AgregarProducto = () => {
     const [categoria, setCategoria] = useState('');
     const [actual, setActual] = useState('');
     const [minimo, setMinimo] = useState('');
+    const [open, setOpen] = useState(false);
 
 
     const handleFormSubmit = async (e) => {
@@ -67,6 +67,7 @@ const AgregarProducto = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoProducto),
+        
       });
 
       if (!response.ok) throw new Error('Fallo al enviar el producto');
@@ -76,13 +77,34 @@ const AgregarProducto = () => {
       setCategoria('');
       setActual('');
       setMinimo('');
-      fetchClientes();
+      setOpen(true);
     } catch (error) {
       console.log('Error al enviar el producto');
     }
   };
 
+const handleClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
 
+  setOpen(false);
+};
+ const action = (
+    <>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
     return (
         <>
         <Card component="form" onSubmit={handleFormSubmit} sx={{ mt: 6, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f7f5f5' }}>
@@ -108,9 +130,16 @@ const AgregarProducto = () => {
             <TextField value={minimo} onChange={(e) => setMinimo(e.target.value)} label="Stock minimo" variant="outlined" fullWidth sx={{ mb: 2 }} type="number" required />
           </CardContent>
           <CardActions>
-            <Button type="submit" variant="contained" size="small">Registrar</Button>
+            <Button type="submit" variant="contained" size="small" sx={{}}>Registrar</Button>
           </CardActions>
         </Card>
+        <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message="Producto registrado correctamente"
+                action={action}
+              />
         </>
     )
 }
