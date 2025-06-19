@@ -104,7 +104,7 @@ const handleClose = (event, reason) => {
   );
     return (
         <>
-        <Card component="form" onSubmit={handleFormSubmit} sx={{ mt: 6, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f7f5f5' }}>
+        <Card component="form" onSubmit={handleFormSubmit} sx={{ mt: 6, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f7f5f5', maxHeight: 500 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>Registrar Producto</Typography>
           <CardContent>
             <TextField value={nombre} onChange={(e) => setNombre(e.target.value)} label="Nombre" variant="outlined" fullWidth sx={{ mb: 2 }} required />
