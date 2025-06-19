@@ -105,8 +105,8 @@ router.delete('/:id', async (req, res) => {
     // import { ObjectId } from 'mongodb';
     const result = await db.collection('productos').deleteOne({ _id: new ObjectId(id) });
 
+    console.log(`Producto eliminado con ID: ${id}`); 
     res.json({ message: `DELETE producto with id: ${id}` });
-    console.log(producto._id); 
   } catch (error) {
     console.error("Error deleting producto:", error);
     res.status(500).json({ error: 'Failed to delete producto' });

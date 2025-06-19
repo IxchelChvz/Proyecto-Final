@@ -92,9 +92,6 @@ const handleClose = (event, reason) => {
 };
  const action = (
     <>
-      <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button>
       <IconButton
         size="small"
         aria-label="close"
