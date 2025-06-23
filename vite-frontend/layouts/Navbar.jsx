@@ -6,7 +6,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 
-const Appbar = () => {
+const MenuBarra = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [productos, setProductos] = useState([]);
 
@@ -64,4 +64,4 @@ const Appbar = () => {
         </>
     )
 }
-export default Appbar;
+export default MenuBarra;
