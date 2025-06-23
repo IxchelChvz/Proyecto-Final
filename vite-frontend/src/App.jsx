@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import Appbar from '../layouts/navBar'
+import Appbar from '../layouts/NavBar'
 import MostrarProductos from './components/StackProductos'
 import AgregarProducto from './components/FormProducto'
 import { Box } from '@mui/material'
