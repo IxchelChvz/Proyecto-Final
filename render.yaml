@@ -1,5 +1,5 @@
 services:
-  - name: backend
+  - name: express-mongodb
     env: node
     plan: starter
     rootDir: backend
@@ -9,7 +9,7 @@ services:
     branch: main
     # Add envVars here if needed
 
-  - name: frontend
+  - name: vite-frontend
     env: static
     plan: starter
     rootDir: frontend
