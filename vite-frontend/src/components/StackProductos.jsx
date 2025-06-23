@@ -17,6 +17,7 @@ const categorias = [
     'Otros'
 ]
 
+const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 
 const MostrarProductos = () => {
     const [productos, setProductos] = useState([]);
@@ -24,7 +25,7 @@ const MostrarProductos = () => {
 
     const fetchProductos = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/productos');
+      const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos`);
 
       if (!response.ok) throw new Error('Error en la respuesta');
       const data = await response.json();
