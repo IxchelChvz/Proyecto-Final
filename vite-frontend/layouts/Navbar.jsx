@@ -3,6 +3,9 @@ import {
   AppBar, Toolbar, Typography, IconButton, Badge, Menu, MenuItem
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+
+const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
+
 const Appbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [productos, setProductos] = useState([]);
@@ -10,7 +13,7 @@ const Appbar = () => {
   useEffect(() => {
   const fetchProductos = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/v1/productos');
+      const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos`);
       const data = await res.json();
       setProductos(data);
     } catch (err) {
