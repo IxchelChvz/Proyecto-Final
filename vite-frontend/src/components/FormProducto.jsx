@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Typography, Button, TextField, Card, CardActions, CardContent, MenuItem, IconButton, Snackbar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
+const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
+
 const unidades = [
     {
         value: 'Kilos',
@@ -63,7 +65,7 @@ const AgregarProducto = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/productos/`, {
+      const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoProducto),
