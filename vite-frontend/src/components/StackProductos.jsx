@@ -3,17 +3,17 @@ import { Card, CardContent, Typography, Box, IconButton, TextField, MenuItem} fr
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const categorias = [
-    'Verduras',
-    'Frutas',
-    'Carnes',
-    'Pescado y mariscos',
-    'Lacteos',
-    'Bebidas',
-    'Granos y cereales',
-    'Salsas y condimentos',
-    'Limpieza e higiene',
-    'Congelados',
-    'Empaquetados',
+    'Verduras 🍆',
+    'Frutas 🍉',
+    'Carnes 🥩',
+    'Pescado y mariscos 🎣',
+    'Lacteos 🧀',
+    'Bebidas 🍹',
+    'Granos y cereales 🌾',
+    'Salsas y condimentos 🧂',
+    'Limpieza e higiene 🧹',
+    'Congelados 🧊',
+    'Empaquetados 📦',
     'Otros'
 ]
 
@@ -37,7 +37,7 @@ const MostrarProductos = () => {
   };   
   
   const handleBorrar = async (id) => {
-    await fetch(`http://localhost:5000/api/v1/productos/${id}`, {
+    await fetch(`${VITE_URL_RENDER}/api/v1/productos/${id}`, {
       method: 'DELETE',
     });
   
