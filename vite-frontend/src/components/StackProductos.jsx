@@ -19,7 +19,7 @@ const categorias = [
 
 const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 
-const MostrarProductos = () => {
+const MostrarProductos = ({ recargar }) => {
     const [productos, setProductos] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
 
@@ -52,16 +52,16 @@ const MostrarProductos = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [recargar]);
  ;
  const productosFiltrados = categoriaSeleccionada
   ? productos.filter((p) => p.categoria === categoriaSeleccionada)
-  : [];
+  : productos;
  
     return (
         <>
         <Box sx={{ textAlign: 'left', mt: 2, mb: 2 }}>
-        <TextField select label="Filtrar por categoría" value={categoriaSeleccionada} onChange={(e) => setCategoriaSeleccionada(e.target.value)} sx={{ minWidth: 550, mt: 4, ml: 8 }}>
+        <TextField data-testid="select-categoria" select label="Filtrar por categoría" value={categoriaSeleccionada} onChange={(e) => setCategoriaSeleccionada(e.target.value)} sx={{ minWidth: 550, mt: 4, ml: 8 }}>
           {categorias.map((cat) => (
             <MenuItem key={cat} value={cat}>{cat}</MenuItem>
           ))}
@@ -70,7 +70,7 @@ const MostrarProductos = () => {
 
        <Box sx={{maxHeight: '440px', overflowY: 'auto', pr: 1, pb: 2 }}>
         {productosFiltrados.map((producto, index) => (
-            <Card key={index} sx={{ ml: 8 , mt: 2, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f0f4ff', maxHeight: 400, overflowY: 'auto', border: 2, borderColor: producto.stock_actual <= producto.stock_minimo ? 'red' : '#f0f4ff' }}>
+            <Card data-testid='Piña' key={index} sx={{ ml: 8 , mt: 2, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f0f4ff', maxHeight: 400, overflowY: 'auto', border: 2, borderColor: producto.stock_actual <= producto.stock_minimo ? 'red' : '#f0f4ff' }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <Box sx={{ flexGrow: 1 }}>

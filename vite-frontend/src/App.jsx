@@ -6,14 +6,16 @@ import AgregarProducto from './components/FormProducto'
 import { Box } from '@mui/material'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [recargar, setRecargar] = useState(false);
+   const handleProductoAgregado = () => {
+    setRecargar(prev => !prev); // Forzar un cambio para activar useEffect en MostrarProductos
+  };
   return (
     <>
       <MenuBarra/>
       <Box display="flex" gap={2}>
-        <AgregarProducto/>
-        <MostrarProductos/>
+        <AgregarProducto onProductoAgregado={handleProductoAgregado} />
+        <MostrarProductos recargar={recargar}/>
       </Box>
       
     </>

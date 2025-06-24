@@ -42,7 +42,7 @@ const categorias = [
     'Otros'
 ]
 
-const AgregarProducto = () => {
+const AgregarProducto = ({ onProductoAgregado }) => {
     const [producto, setProducto] = useState({});
     const [nombre, setNombre] = useState('');
     const [unidad, setUnidad] = useState('');
@@ -80,6 +80,10 @@ const AgregarProducto = () => {
       setActual('');
       setMinimo('');
       setOpen(true);
+
+    if (onProductoAgregado) {
+      onProductoAgregado();
+    }
     } catch (error) {
       console.log('Error al enviar el producto');
     }
@@ -109,8 +113,8 @@ const handleClose = (event, reason) => {
         <Card component="form" onSubmit={handleFormSubmit} sx={{ mt: 6, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f7f5f5', maxHeight: 500 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>Registrar Producto</Typography>
           <CardContent>
-            <TextField value={nombre} onChange={(e) => setNombre(e.target.value)} label="Nombre" variant="outlined" fullWidth sx={{ mb: 2 }} required />
-            <TextField id="unidad" select label="Unidad"
+            <TextField data-testid="input-nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} label="Nombre" variant="outlined" fullWidth sx={{ mb: 2 }} required />
+            <TextField data-testid="input-unidad" id="unidad" select label="Unidad"
              value={unidad} onChange={(e) => setUnidad(e.target.value)} variant="outlined" fullWidth sx={{ mb: 2 }} required>
             {unidades.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -118,18 +122,18 @@ const handleClose = (event, reason) => {
                 </MenuItem>
             ))}
             </TextField>
-            <TextField select label='Categoria'fullWidth sx={{ mb: 2 }} value={categoria} onChange={(e) => setCategoria(e.target.value)} required>
+            <TextField data-testid="input-categoria" select label='Categoria'fullWidth sx={{ mb: 2 }} value={categoria} onChange={(e) => setCategoria(e.target.value)} required>
                 {categorias.map((categoria) => (
                     <MenuItem key={categoria} value={categoria}>
                         {categoria}
                     </MenuItem>
                 ))}
             </TextField>
-            <TextField value={actual} onChange={(e) => setActual(e.target.value)} label="Stock actual" variant="outlined" fullWidth sx={{ mb: 2 }} type="number" required />
-            <TextField value={minimo} onChange={(e) => setMinimo(e.target.value)} label="Stock minimo" variant="outlined" fullWidth sx={{ mb: 2 }} type="number" required />
+            <TextField data-testid="input-actual" value={actual} onChange={(e) => setActual(e.target.value)} label="Stock actual" variant="outlined" fullWidth sx={{ mb: 2 }} type="number" required />
+            <TextField data-testid="input-minimo" value={minimo} onChange={(e) => setMinimo(e.target.value)} label="Stock minimo" variant="outlined" fullWidth sx={{ mb: 2 }} type="number" required />
           </CardContent>
           <CardActions>
-            <Button type="submit" variant="contained" size="small" sx={{}}>Registrar</Button>
+            <Button data-testid="submit-submit" type="submit" variant="contained" size="small" sx={{}}>Registrar</Button>
           </CardActions>
         </Card>
         <Snackbar
