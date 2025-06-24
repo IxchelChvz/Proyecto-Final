@@ -3,17 +3,17 @@ import { Card, CardContent, Typography, Box, IconButton, TextField, MenuItem} fr
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const categorias = [
-    'Verduras 🍆',
-    'Frutas 🍉',
-    'Carnes 🥩',
-    'Pescado y mariscos 🎣',
-    'Lacteos 🧀',
-    'Bebidas 🍹',
-    'Granos y cereales 🌾',
-    'Salsas y condimentos 🧂',
-    'Limpieza e higiene 🧹',
-    'Congelados 🧊',
-    'Empaquetados 📦',
+    'Verduras',
+    'Frutas',
+    'Carnes',
+    'Pescado y mariscos',
+    'Lacteos',
+    'Bebidas',
+    'Granos y cereales',
+    'Salsas y condimentos',
+    'Limpieza e higiene',
+    'Congelados',
+    'Empaquetados',
     'Otros'
 ]
 
@@ -54,7 +54,7 @@ const MostrarProductos = ({ recargar }) => {
     return () => clearInterval(interval);
   }, [recargar]);
  ;
- const productosFiltrados = categoriaSeleccionada
+const productosFiltrados = categoriaSeleccionada
   ? productos.filter((p) => p.categoria === categoriaSeleccionada)
   : productos;
  
