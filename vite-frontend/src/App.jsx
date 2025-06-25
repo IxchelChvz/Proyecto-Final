@@ -7,8 +7,8 @@ import { Box } from '@mui/material'
 
 function App() {
   const [recargar, setRecargar] = useState(false);
-   const handleProductoAgregado = () => {
-    setRecargar(prev => !prev); // Forzar un cambio para activar useEffect en MostrarProductos
+  const handleProductoAgregado = () => {
+    setRecargar(prev => !prev);
   };
   return (
     <>

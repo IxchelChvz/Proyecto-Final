@@ -1,27 +1,57 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Box, IconButton, TextField, MenuItem} from '@mui/material';
+import { 
+  Card, CardContent, Typography, Box, 
+  IconButton, TextField, MenuItem, Snackbar, 
+  Dialog, DialogTitle, DialogContent, 
+  DialogContentText, DialogActions, 
+  Button,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const categorias = [
-    'Verduras',
-    'Frutas',
-    'Carnes',
-    'Pescado y mariscos',
-    'Lacteos',
-    'Bebidas',
-    'Granos y cereales',
-    'Salsas y condimentos',
-    'Limpieza e higiene',
-    'Congelados',
-    'Empaquetados',
-    'Otros'
-]
+  { value: 'Verduras', label: 'Verduras 🥦' },
+  { value: 'Frutas', label: 'Frutas 🍎' },
+  { value: 'Carnes', label: 'Carnes 🥩' },
+  { value: 'Pescado y mariscos', label: 'Pescado y mariscos 🐟' },
+  { value: 'Lacteos', label: 'Lácteos 🧀' },
+  { value: 'Bebidas', label: 'Bebidas 🥤' },
+  { value: 'Granos y cereales', label: 'Granos y cereales 🌾' },
+  { value: 'Salsas y condimentos', label: 'Salsas y condimentos 🧂' },
+  { value: 'Limpieza e higiene', label: 'Limpieza e higiene 🧼' },
+  { value: 'Congelados', label: 'Congelados ❄️' },
+  { value: 'Empaquetados', label: 'Empaquetados 📦' },
+  { value: 'Otros', label: 'Otros 🛒' }
+];
 
 const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 
 const MostrarProductos = ({ recargar }) => {
     const [productos, setProductos] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
+    const [sumar, setSumar] = useState(0);
+
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [productoAEliminar, setProductoAEliminar] = useState(null);
+
+
+    const confirmarEliminacion = (producto) => {
+      setProductoAEliminar(producto);
+      setOpenDialog(true);
+    };
+    const handleConfirmarBorrar = async () => {
+    if (productoAEliminar) {
+      await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoAEliminar._id}`, {
+        method: 'DELETE',
+      });
+      fetchProductos();
+      setOpenSnackbar(true);
+    }
+    setOpenDialog(false);
+    setProductoAEliminar(null);
+  };
 
     const fetchProductos = async () => {
     try {
@@ -57,13 +87,18 @@ const MostrarProductos = ({ recargar }) => {
 const productosFiltrados = categoriaSeleccionada
   ? productos.filter((p) => p.categoria === categoriaSeleccionada)
   : productos;
- 
+ const handleSumar = (e) => {
+   
+ }
+ const handleRestar = () => {
+
+ }
     return (
         <>
         <Box sx={{ textAlign: 'left', mt: 2, mb: 2 }}>
         <TextField data-testid="select-categoria" select label="Filtrar por categoría" value={categoriaSeleccionada} onChange={(e) => setCategoriaSeleccionada(e.target.value)} sx={{ minWidth: 550, mt: 4, ml: 8 }}>
           {categorias.map((cat) => (
-            <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+            <MenuItem key={cat.value} value={cat.value}>{cat.label}</MenuItem>
           ))}
         </TextField>
 
@@ -81,15 +116,42 @@ const productosFiltrados = categoriaSeleccionada
                     <Typography variant='subtitle1' sx={{ color: 'black' }}><b>Stock actual: </b>{producto.stock_actual}</Typography>
                     <Typography variant='subtitle1' sx={{ color: 'black'}}><b>Stock mínimo: </b>{producto.stock_minimo}</Typography>
                   </Box>
-                  <IconButton onClick={() => handleBorrar(producto._id)} color="error">
-                    <DeleteIcon />
+                  <IconButton onClick={() => confirmarEliminacion(producto)} color="error">
+                    <DeleteIcon sx={{ fontSize: 35 }}/>
+                  </IconButton>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', gap: 9, mt: 1, mb: -3 }}>
+                  <IconButton onClick={handleRestar} color='primary'>
+                    <RemoveIcon sx={{ fontSize: 35 }}/>
+                  </IconButton>
+                  <IconButton onClick={handleSumar} color='primary'>
+                    <AddIcon sx={{ fontSize: 35 }}/>
                   </IconButton>
                 </Box>
               </CardContent>
             </Card>
         ))}
         </Box>
-       {/* <Alert variant="filled" severity="warning" sx={{position: 'fixed', top: '30px',left: '15px',transform: 'translateY(550px)', zIndex: 1300, width: 'fit-content',}}>This is a warning Alert.</Alert> */}
+
+        <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogTitle>¿Eliminar producto?</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                ¿Estás seguro de que deseas eliminar "{productoAEliminar?.nombre}"?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
+              <Button onClick={handleConfirmarBorrar} color="error">Eliminar</Button>
+            </DialogActions>
+          </Dialog>
+
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={3000}
+            onClose={() => setOpenSnackbar(false)}
+            message="Producto eliminado con éxito"
+          />
         </Box>
       </>
     )
