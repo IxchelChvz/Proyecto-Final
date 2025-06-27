@@ -87,6 +87,7 @@ const MostrarProductos = ({ recargar }) => {
 const productosFiltrados = categoriaSeleccionada
   ? productos.filter((p) => p.categoria === categoriaSeleccionada)
   : productos;
+  
  const handleSumar = (e) => {
    
  }
