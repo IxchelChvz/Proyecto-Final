@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <MenuBarra/>
-      <Box display="flex" gap={2}>
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} p={2}>
         <AgregarProducto onProductoAgregado={handleProductoAgregado} />
         <MostrarProductos recargar={recargar}/>
       </Box>

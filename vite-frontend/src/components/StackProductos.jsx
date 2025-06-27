@@ -30,7 +30,7 @@ const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 const MostrarProductos = ({ recargar }) => {
     const [productos, setProductos] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
-    const [sumar, setSumar] = useState(0);
+    const [contar, setContar] = useState(0);
 
     const [openDialog, setOpenDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -41,6 +41,7 @@ const MostrarProductos = ({ recargar }) => {
       setProductoAEliminar(producto);
       setOpenDialog(true);
     };
+    
     const handleConfirmarBorrar = async () => {
     if (productoAEliminar) {
       await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoAEliminar._id}`, {
@@ -87,7 +88,6 @@ const MostrarProductos = ({ recargar }) => {
 const productosFiltrados = categoriaSeleccionada
   ? productos.filter((p) => p.categoria === categoriaSeleccionada)
   : productos;
-  
  const handleSumar = (e) => {
    
  }
@@ -118,16 +118,18 @@ const productosFiltrados = categoriaSeleccionada
                     <Typography variant='subtitle1' sx={{ color: 'black'}}><b>Stock mínimo: </b>{producto.stock_minimo}</Typography>
                   </Box>
                   <IconButton onClick={() => confirmarEliminacion(producto)} color="error">
-                    <DeleteIcon sx={{ fontSize: 35 }}/>
+                    <DeleteIcon sx={{ fontSize: 30 }}/>
                   </IconButton>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: 9, mt: 1, mb: -3 }}>
-                  <IconButton onClick={handleRestar} color='primary'>
+                  <IconButton  onClick={() => setContar(contar - 1)}color='primary'>
                     <RemoveIcon sx={{ fontSize: 35 }}/>
                   </IconButton>
-                  <IconButton onClick={handleSumar} color='primary'>
+                  {contar}
+                  <IconButton onClick={() => setContar(contar + 1)} color='primary'>
                     <AddIcon sx={{ fontSize: 35 }}/>
                   </IconButton>
+                  
                 </Box>
               </CardContent>
             </Card>

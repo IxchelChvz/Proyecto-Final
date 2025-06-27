@@ -52,7 +52,7 @@ const MenuBarra = () => {
               {productosBajoStock.length > 0 ? (
                 productosBajoStock.map((producto) => (
                   <MenuItem key={producto._id}>
-                    {producto.nombre} ({producto.stock_actual})
+                    {producto.nombre} ({producto.stock_actual})⬇️
                   </MenuItem>
                 ))
               ) : (
