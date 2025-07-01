@@ -4,6 +4,7 @@ import cors from 'cors';
 import { fileURLToPath } from "url";
 import connectDB from './db-mongodb.js';  // Import your MongoDB connection module
 import productosRouter from './routes/productos.js';
+import usuariosRouter from './routes/usuarios.js';
 
 
 
@@ -25,6 +26,7 @@ async function startServer() {
 
     // Mount routes
     app.use('/api/v1/productos', productosRouter);
+    app.use('/api/v1/usuarios', usuariosRouter);
   
     
 
