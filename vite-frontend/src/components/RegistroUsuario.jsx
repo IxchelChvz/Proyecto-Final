@@ -1,39 +1,37 @@
 import { useState } from "react";
 import { Button, Card, CardContent, CardActions, Typography, TextField, Stack } from '@mui/material';
 
-const RegistroUser = ({ onUsuarioAgregado }) => {
+const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
+
+const RegistroUser = ({ setToken }) => {
   const [nombre, setNombre] = useState('');
   const [contrasena, setContrasena] = useState('');
 
   const handleFormSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const nuevoUsuario = { nombre, contrasena };
+    const nuevoUsuario = { nombre, contrasena };
 
-  try {
-    const response = await fetch(`${VITE_URL_RENDER}/api/v1/usuarios/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(nuevoUsuario),
-    });
+    try {
+      const response = await fetch(`${VITE_URL_RENDER}/api/v1/usuarios/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevoUsuario),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) throw new Error(data.error || 'Fallo al enviar el usuario');
+      if (!response.ok) throw new Error(data.error || 'Fallo al enviar el usuario');
 
-    // Guardar token en localStorage y actualizar estado en App
-    localStorage.setItem('token', data.token);
-    if (onUsuarioAgregado) {
-      onUsuarioAgregado(data.token); // si quieres pasar el token para actualizar estado
+      localStorage.setItem('token', data.token);
+      setToken(data.token);
+
+      setNombre('');
+      setContrasena('');
+    } catch (error) {
+      console.error('Error al enviar el usuario', error);
     }
-
-    setNombre('');
-    setContrasena('');
-
-  } catch (error) {
-    console.error('Error al enviar el usuario', error);
-  }
-};
+  };
   return (
     <Stack direction="row" spacing={2} mt={10} justifyContent="center">
       <Card
