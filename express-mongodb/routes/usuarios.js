@@ -31,10 +31,14 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(contrasena, salt);
 
-    await db.collection('usuarios').insertOne({ nombre, contrasena: hash });
+    const result = await db.collection('usuarios').insertOne({ nombre, contrasena: hash });
 
-    res.status(201).json({ message: 'Usuario creado' });
+    // Generar token JWT para el usuario recién creado
+    const token = jwt.sign({ id: result.insertedId, nombre }, JWT_SECRET, { expiresIn: '1d' });
+
+    res.status(201).json({ message: 'Usuario creado', token });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });

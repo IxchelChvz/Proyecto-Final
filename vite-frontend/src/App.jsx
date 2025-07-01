@@ -6,6 +6,7 @@ import AgregarProducto from './components/FormProducto';
 import LoginUser from './components/LoginUsuario';
 
 import { Box } from '@mui/material';
+import RegistroUser from './components/RegistroUsuario';
 
 function ProductosPage({ onProductoAgregado, recargar }) {
   return (
@@ -33,26 +34,33 @@ function App() {
   return (
     <BrowserRouter>
       <MenuBarra />
-      <Routes>
-        {/* Ruta pública para login, si ya hay token redirige a productos */}
-        <Route
-          path="/"
-          element={token ? <Navigate to="/productos" /> : <LoginUser setToken={setToken} />}
-        />
+     <Routes>
+  {/* Ruta pública para registro */}
+  <Route
+    path="/"
+    element={token ? <Navigate to="/productos" /> : <RegistroUser setToken={setToken} />}
+  />
 
-        {/* Ruta protegida para productos */}
-        <Route
-          path="/productos"
-          element={token ? (
-            <ProductosPage onProductoAgregado={handleProductoAgregado} recargar={recargar} />
-          ) : (
-            <Navigate to="/" />
-          )}
-        />
+  {/* Ruta pública para login */}
+  <Route
+    path="/login"
+    element={token ? <Navigate to="/productos" /> : <LoginUser setToken={setToken} />}
+  />
 
-        {/* Para cualquier otra ruta redirigir a login */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+  {/* Ruta protegida para productos */}
+  <Route
+    path="/productos"
+    element={token ? (
+      <ProductosPage onProductoAgregado={handleProductoAgregado} recargar={recargar} />
+    ) : (
+      <Navigate to="/" />
+    )}
+  />
+
+  {/* Para cualquier otra ruta redirigir a raíz (registro) */}
+  <Route path="*" element={<Navigate to="/" />} />
+</Routes>
+
     </BrowserRouter>
   );
 }
