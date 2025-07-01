@@ -10,9 +10,11 @@ import RegistroUser from './components/RegistroUsuario';
 
 function ProductosPage({ onProductoAgregado, recargar }) {
   return (
-    <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} p={2}>
-      <AgregarProducto onProductoAgregado={onProductoAgregado} />
-      <MostrarProductos recargar={recargar} />
+    <Box display="flex" gap={2}> 
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} sx={{ml:15}}>
+        <AgregarProducto onProductoAgregado={onProductoAgregado} />
+        <MostrarProductos recargar={recargar} />
+      </Box>
     </Box>
   );
 }
