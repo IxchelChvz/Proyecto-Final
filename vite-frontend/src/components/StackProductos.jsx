@@ -30,7 +30,7 @@ const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 const MostrarProductos = ({ recargar }) => {
     const [productos, setProductos] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
-    const [contar, setContar] = useState(0);
+   
 
     const [openDialog, setOpenDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -67,13 +67,6 @@ const MostrarProductos = ({ recargar }) => {
     }
   };   
   
-  const handleBorrar = async (id) => {
-    await fetch(`${VITE_URL_RENDER}/api/v1/productos/${id}`, {
-      method: 'DELETE',
-    });
-  
-    fetchProductos(); 
-  };
 
   useEffect(() => {
     fetchProductos(); 
@@ -88,12 +81,29 @@ const MostrarProductos = ({ recargar }) => {
 const productosFiltrados = categoriaSeleccionada
   ? productos.filter((p) => p.categoria === categoriaSeleccionada)
   : productos;
- const handleSumar = (e) => {
-   
- }
- const handleRestar = () => {
 
- }
+const actualizarStock = async (productoId, nuevoStock) => {
+  try {
+    const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ stock_actual: nuevoStock }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Error al actualizar el stock');
+    }
+
+    fetchProductos(); 
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+
     return (
         <>
         <Box sx={{ textAlign: 'left', mt: 2, mb: 2 }}>
@@ -106,7 +116,7 @@ const productosFiltrados = categoriaSeleccionada
 
        <Box sx={{maxHeight: '440px', overflowY: 'auto', pr: 1, pb: 2 }}>
         {productosFiltrados.map((producto, index) => (
-            <Card data-testid='Piña' key={index} sx={{ ml: 8 , mt: 2, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f0f4ff', maxHeight: 400, overflowY: 'auto', border: 2, borderColor: producto.stock_actual <= producto.stock_minimo ? 'red' : '#f0f4ff' }}>
+            <Card data-testid='Piña' key={index} sx={{ ml: 8 , mt: 2, maxWidth: 500, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f0f4ff', border: 2, borderColor: producto.stock_actual <= producto.stock_minimo ? 'red' : '#f0f4ff' }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <Box sx={{ flexGrow: 1 }}>
@@ -114,23 +124,31 @@ const productosFiltrados = categoriaSeleccionada
                     <Typography variant='subtitle1' sx={{ color: 'black' }}><b>Nombre: </b>{producto.nombre}</Typography>
                     <Typography variant='subtitle1' sx={{ color: 'black' }}><b>Unidad: </b>{producto.unidad}</Typography>
                     <Typography variant='subtitle1' sx={{ color: 'black' }}><b>Categoria: </b>{producto.categoria}</Typography>
-                    <Typography variant='subtitle1' sx={{ color: 'black' }}><b>Stock actual: </b>{producto.stock_actual}</Typography>
                     <Typography variant='subtitle1' sx={{ color: 'black'}}><b>Stock mínimo: </b>{producto.stock_minimo}</Typography>
+                    <Typography variant='subtitle1' sx={{ color: 'black' }}><b>Stock actual: </b>{producto.stock_actual}</Typography>
                   </Box>
                   <IconButton onClick={() => confirmarEliminacion(producto)} color="error">
                     <DeleteIcon sx={{ fontSize: 30 }}/>
                   </IconButton>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: 9, mt: 1, mb: -3 }}>
-                  <IconButton  onClick={() => setContar(contar - 1)}color='primary'>
-                    <RemoveIcon sx={{ fontSize: 35 }}/>
-                  </IconButton>
-                  {contar}
-                  <IconButton onClick={() => setContar(contar + 1)} color='primary'>
-                    <AddIcon sx={{ fontSize: 35 }}/>
-                  </IconButton>
-                  
-                </Box>
+                <IconButton
+                  onClick={() => actualizarStock(producto._id, producto.stock_actual - 1)}
+                  color="primary"
+                  disabled={producto.stock_actual <= 0}
+                >
+                  <RemoveIcon sx={{ fontSize: 35 }} />
+                </IconButton>
+
+                <Typography sx={{ mt: 1 }} variant="h6">{producto.stock_actual}</Typography>
+
+                <IconButton
+                  onClick={() => actualizarStock(producto._id, producto.stock_actual + 1)} 
+                  color="primary"
+                >
+                  <AddIcon sx={{ fontSize: 35 }} />
+                </IconButton>
+              </Box>
               </CardContent>
             </Card>
         ))}

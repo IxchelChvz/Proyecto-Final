@@ -112,6 +112,33 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete producto' });
   }
 });
+router.put('/:id', async (req, res) => {
+  try {
+    const db = req.app.locals.db;
+    const id = req.params.id;
+    const { stock_actual } = req.body;
+
+    if (typeof stock_actual !== 'number') {
+      return res.status(400).json({ error: 'El stock_actual debe ser un número' });
+    }
+
+    const result = await db.collection('productos').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { stock_actual } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: 'Producto no encontrado o sin cambios' });
+    }
+
+    res.json({ message: 'Producto actualizado correctamente' });
+  } catch (error) {
+    console.error("Error al actualizar producto:", error);
+    res.status(500).json({ error: 'Error al actualizar producto' });
+  }
+});
+
+
 
 
 export default router;
