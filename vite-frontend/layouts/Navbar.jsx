@@ -15,9 +15,29 @@ const MenuBarra = ({ setToken }) => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos`, 
+          {headers: {'Authorization': `Bearer ${token}`}});
+         if (res.status === 401) {
+      // Token inválido o expirado
+      setToken(null);
+      localStorage.removeItem('token');
+      navigate('/login');  // O donde sea tu pantalla de login
+      return;
+    }
+
+    if (!res.ok) {
+      // Otro error
+      console.error('Error en la respuesta del servidor:', res.status);
+      return;
+    }
         const data = await res.json();
-        setProductos(data);
+        
+        if (Array.isArray(data)) {
+      setProductos(data);
+    } else {
+      setProductos([]);
+    }
       } catch (err) {
         console.error('Error al obtener productos', err);
       }
@@ -26,7 +46,7 @@ const MenuBarra = ({ setToken }) => {
     fetchProductos();
   }, []);
 
-  const productosBajoStock = productos.filter(p => p.stock_actual <= p.stock_minimo);
+ const productosBajoStock = Array.isArray(productos) ? productos.filter(p => p.stock_actual <= p.stock_minimo) : [];
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
