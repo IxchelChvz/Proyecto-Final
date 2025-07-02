@@ -140,7 +140,7 @@ const actualizarStock = async (productoId, nuevoStock) => {
 
     return (
         <>
-        <Box sx={{ textAlign: 'left', mt: 3, mb: 1 }}>
+        <Box sx={{ textAlign: 'left', mt: -2, mb: 1 }}>
         <TextField data-testid="select-categoria" select label="Filtrar por categoría" value={categoriaSeleccionada} onChange={(e) => setCategoriaSeleccionada(e.target.value)} sx={{ minWidth: 550, mt: 4, ml: 8 }}>
           {categorias.map((cat) => (
             <MenuItem key={cat.value} value={cat.value}>{cat.label}</MenuItem>

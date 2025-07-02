@@ -23,14 +23,12 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  justify-content: center;     /* Centra horizontalmente */
-  align-items: center;         /* Centra verticalmente */
-  flex-direction: column;      /* Para que el contenido fluya de arriba hacia abajo */
+   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #e3e0d8;   /* O el color que prefieras */
+  max-height: 100vh;    /* Limita alto máximo al viewport */
+  overflow: hidden;     /* Oculta scroll */
+  background-color: #e3e0d8;
 }
 
 h1 {
