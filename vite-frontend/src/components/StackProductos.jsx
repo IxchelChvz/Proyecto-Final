@@ -58,33 +58,37 @@ const MostrarProductos = ({ recargar }) => {
   setProductoAEliminar(null);
 };
 
-    async function fetchProductos() {
+ async function fetchProductos() {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('No hay token, usuario no autenticado');
-    }
+    if (!token) throw new Error('No token en localStorage');
+
     const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos`, {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        'Authorization': `Bearer ${token}`,
+      },
     });
 
-    if (!response.ok) {
-      throw new Error('Error en la respuesta: ' + response.status);
-    }
-    const data = await response.json();
+    const text = await response.text(); // leer como texto para debug
+    console.log('Respuesta cruda:', text);
 
-    if (!Array.isArray(data)) {
-      throw new Error('La respuesta no es un array');
+    if (!response.ok) {
+      console.error('Error en respuesta:', response.status, text);
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
+      throw new Error(`Error en la respuesta: ${response.status}`);
     }
+
+    const data = JSON.parse(text);
+
+    if (!Array.isArray(data)) throw new Error('La respuesta no es un array');
 
     setProductos(data);
   } catch (error) {
     console.error('Error al obtener los productos:', error);
-    // Aquí puedes manejar logout o mostrar mensaje, por ejemplo:
-    // localStorage.removeItem('token');
-    // window.location.href = '/login';
   }
 }
 
@@ -98,9 +102,11 @@ const MostrarProductos = ({ recargar }) => {
     return () => clearInterval(interval);
   }, [recargar]);
  ;
-const productosFiltrados = categoriaSeleccionada
-  ? productos.filter((p) => p.categoria === categoriaSeleccionada)
-  : productos;
+const productosFiltrados = categoriaSeleccionada && Array.isArray(productos)
+  ? productos.filter(p => p.categoria === categoriaSeleccionada)
+  : Array.isArray(productos)
+    ? productos
+    : [];
 
 const actualizarStock = async (productoId, nuevoStock) => {
   try {
