@@ -36,35 +36,37 @@ function App() {
   return (
     <BrowserRouter>
       <MenuBarra setToken={setToken} />
-     <Routes>
-  {/* Ruta pública para registro */}
-  <Route
-  path="/registro"
-  element={token ? <Navigate to="/productos" /> : <RegistroUser setToken={setToken} />}
-/>
-<Route
-  path="/"
-  element={<Navigate to={token ? "/productos" : "/login"} />}
-/>
-
-  {/* Ruta pública para login */}
+    <Routes>
+  {/* Ruta para login */}
   <Route
     path="/login"
     element={token ? <Navigate to="/productos" /> : <LoginUser setToken={setToken} />}
   />
 
-  {/* Ruta protegida para productos */}
+  {/* Ruta para registro */}
+  <Route
+    path="/registro"
+    element={token ? <Navigate to="/productos" /> : <RegistroUser setToken={setToken} />}
+  />
+
+  {/* Ruta raíz redirige a login o productos */}
+  <Route
+    path="/"
+    element={<Navigate to={token ? "/productos" : "/login"} />}
+  />
+
+  {/* Ruta protegida */}
   <Route
     path="/productos"
     element={token ? (
       <ProductosPage onProductoAgregado={handleProductoAgregado} recargar={recargar} />
     ) : (
-      <Navigate to="/" />
+      <Navigate to="/login" />
     )}
   />
 
-  {/* Para cualquier otra ruta redirigir a raíz (registro) */}
-  <Route path="*" element={<Navigate to="/" />} />
+  {/* Ruta no encontrada */}
+  <Route path="*" element={<h1>Página no encontrada</h1>} />
 </Routes>
 
     </BrowserRouter>
