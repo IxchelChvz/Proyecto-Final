@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button, Card, CardContent, CardActions, Typography, TextField, Stack } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 
@@ -75,7 +74,7 @@ const LoginUser = ({ setToken }) => {
           />
           <Typography variant="body2" sx={{ mt: 1 }}>
             ¿Aún no tienes una cuenta?{' '}
-            <Link to="/register" style={{ color: '#1976d2', textDecoration: 'none' }}>
+           <Link to="/registro" style={{ color: '#1976d2', textDecoration: 'none' }}>
               Registrate
             </Link>
           </Typography>
