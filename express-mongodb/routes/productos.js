@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-import { verificarToken } from './middleware/usuarios.js';
+import { verificarToken } from '../middleware/usuarios.js';
 
 const router = Router();
 
