@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, CardContent, CardActions, Typography, TextField, Stack } from '@mui/material';
+import { Link } from 'react-router-dom';
+
+const VITE_URL_RENDER = import.meta.env.VITE_URL_RENDER;
 
 const LoginUser = ({ setToken }) => {
   const [nombre, setNombre] = useState('');
@@ -47,7 +50,7 @@ const LoginUser = ({ setToken }) => {
         onSubmit={handleFormSubmit}
         sx={{ mt: 4, maxWidth: 400, p: 3, borderRadius: 3, boxShadow: 3, backgroundColor: '#f9f9f9' }}
       >
-        <Typography variant="h6" sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2, textAlign: 'center'}}>
           Iniciar sesión
         </Typography>
         <CardContent>
@@ -70,6 +73,12 @@ const LoginUser = ({ setToken }) => {
             sx={{ mb: 2 }}
             required
           />
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            ¿Aún no tienes una cuenta?{' '}
+            <Link to="/register" style={{ color: '#1976d2', textDecoration: 'none' }}>
+              Registrate
+            </Link>
+          </Typography>
         </CardContent>
         <CardActions>
           <Button type="submit" variant="contained" size="small" fullWidth>

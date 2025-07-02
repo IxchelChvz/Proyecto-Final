@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
+import { verificarToken } from './middleware/usuarios.js';
 
 const router = Router();
 
@@ -72,11 +73,13 @@ const router = Router();
  *         description: Error del servidor
  */
 
-// GET /api/v1/productos
-router.get('/', async (req, res) => {
+// GET productos: solo los del usuario autenticado
+router.get('/', verificarToken, async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const productos = await db.collection('productos').find().toArray();
+    const usuario = req.usuario.nombre; // asumiendo que en el token guardas 'nombre'
+
+    const productos = await db.collection('productos').find({ usuario }).toArray();
     res.json(productos);
   } catch (error) {
     console.error("Error fetching productos:", error);
@@ -84,10 +87,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+// POST producto: guardamos producto con usuario asociado
+router.post("/", verificarToken, async (req, res) => {
   try {
     const db = req.app.locals.db;
     const producto = req.body;
+    producto.usuario = req.usuario.nombre;  // asociamos usuario al producto
+    producto.fecha_hora_registro = new Date();
+
     const result = await db.collection('productos').insertOne(producto);
     res.status(201).json({ message: 'Producto creado', id: result.insertedId });
   } catch (error) {
@@ -96,30 +103,49 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+// DELETE producto: opcionalmente validar usuario antes de eliminar
+router.delete('/:id', verificarToken, async (req, res) => {
   try {
     const db = req.app.locals.db;
     const id = req.params.id;
+    const usuario = req.usuario.nombre;
 
-    // Aquí deberías usar ObjectId si el ID lo requiere
-    // import { ObjectId } from 'mongodb';
-    const result = await db.collection('productos').deleteOne({ _id: new ObjectId(id) });
+    // Verificamos que el producto pertenece al usuario
+    const producto = await db.collection('productos').findOne({ _id: new ObjectId(id) });
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    if (producto.usuario !== usuario) {
+      return res.status(403).json({ error: 'No autorizado para eliminar este producto' });
+    }
 
-    console.log(`Producto eliminado con ID: ${id}`); 
-    res.json({ message: `DELETE producto with id: ${id}` });
+    await db.collection('productos').deleteOne({ _id: new ObjectId(id) });
+    res.json({ message: `Producto eliminado con ID: ${id}` });
   } catch (error) {
     console.error("Error deleting producto:", error);
     res.status(500).json({ error: 'Failed to delete producto' });
   }
 });
-router.put('/:id', async (req, res) => {
+
+// PUT producto: validar usuario antes de actualizar
+router.put('/:id', verificarToken, async (req, res) => {
   try {
     const db = req.app.locals.db;
     const id = req.params.id;
+    const usuario = req.usuario.nombre;
     const { stock_actual } = req.body;
 
     if (typeof stock_actual !== 'number') {
       return res.status(400).json({ error: 'El stock_actual debe ser un número' });
+    }
+
+    // Verificamos que el producto pertenece al usuario
+    const producto = await db.collection('productos').findOne({ _id: new ObjectId(id) });
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    if (producto.usuario !== usuario) {
+      return res.status(403).json({ error: 'No autorizado para actualizar este producto' });
     }
 
     const result = await db.collection('productos').updateOne(
@@ -137,8 +163,5 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar producto' });
   }
 });
-
-
-
 
 export default router;

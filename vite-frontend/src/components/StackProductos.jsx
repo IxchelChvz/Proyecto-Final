@@ -43,20 +43,29 @@ const MostrarProductos = ({ recargar }) => {
     };
     
     const handleConfirmarBorrar = async () => {
-    if (productoAEliminar) {
-      await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoAEliminar._id}`, {
-        method: 'DELETE',
-      });
-      fetchProductos();
-      setOpenSnackbar(true);
-    }
-    setOpenDialog(false);
-    setProductoAEliminar(null);
-  };
+  if (productoAEliminar) {
+    const token = localStorage.getItem('token');
+    await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoAEliminar._id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    fetchProductos();
+    setOpenSnackbar(true);
+  }
+  setOpenDialog(false);
+  setProductoAEliminar(null);
+};
 
-    const fetchProductos = async () => {
+    async function fetchProductos() {
     try {
-      const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos`);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (!response.ok) throw new Error('Error en la respuesta');
       const data = await response.json();
@@ -65,7 +74,7 @@ const MostrarProductos = ({ recargar }) => {
     } catch (error) {
       console.error('Error al obtener los productos:', error);
     }
-  };   
+  }   
   
 
   useEffect(() => {
@@ -84,10 +93,12 @@ const productosFiltrados = categoriaSeleccionada
 
 const actualizarStock = async (productoId, nuevoStock) => {
   try {
+    const token = localStorage.getItem('token');
     const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({ stock_actual: nuevoStock }),
     });
@@ -96,7 +107,7 @@ const actualizarStock = async (productoId, nuevoStock) => {
       throw new Error('Error al actualizar el stock');
     }
 
-    fetchProductos(); 
+    fetchProductos();
   } catch (err) {
     console.error(err);
   }

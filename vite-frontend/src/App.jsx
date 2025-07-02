@@ -35,7 +35,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <MenuBarra />
+      <MenuBarra setToken={setToken} />
      <Routes>
   {/* Ruta pública para registro */}
   <Route

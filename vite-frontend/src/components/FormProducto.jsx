@@ -65,9 +65,11 @@ const AgregarProducto = ({ onProductoAgregado }) => {
     };
 
     try {
+      const token = localStorage.getItem('token');
+
       const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(nuevoProducto),
         
       });

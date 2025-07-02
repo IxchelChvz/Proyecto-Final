@@ -25,9 +25,12 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  justify-content: center;     /* Centra horizontalmente */
+  align-items: center;         /* Centra verticalmente */
+  flex-direction: column;      /* Para que el contenido fluya de arriba hacia abajo */
   min-width: 320px;
   min-height: 100vh;
+  background-color: #e3e0d8;   /* O el color que prefieras */
 }
 
 h1 {
