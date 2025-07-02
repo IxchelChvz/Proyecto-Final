@@ -45,7 +45,7 @@ function App() {
 
   {/* Ruta para registro */}
   <Route
-    path="/registro"
+    path="/register"
     element={token ? <Navigate to="/productos" /> : <RegistroUser setToken={setToken} />}
   />
 

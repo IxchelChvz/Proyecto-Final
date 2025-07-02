@@ -74,7 +74,7 @@ const LoginUser = ({ setToken }) => {
           />
           <Typography variant="body2" sx={{ mt: 1 }}>
             ¿Aún no tienes una cuenta?{' '}
-           <Link to="/registro" style={{ color: '#1976d2', textDecoration: 'none' }}>
+           <Link to="/register" style={{ color: '#1976d2', textDecoration: 'none' }}>
               Registrate
             </Link>
           </Typography>

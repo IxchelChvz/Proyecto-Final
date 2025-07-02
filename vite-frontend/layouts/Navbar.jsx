@@ -32,10 +32,12 @@ const MenuBarra = ({ setToken }) => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          setToken(null);
+        setToken(null);
+        if (location.pathname !== '/login' && location.pathname !== '/register') {
           navigate('/login');
-          return;
         }
+        return;
+      }
         const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos`, {
           headers: { Authorization: `Bearer ${token}` },
         });
