@@ -59,23 +59,34 @@ const MostrarProductos = ({ recargar }) => {
 };
 
     async function fetchProductos() {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) throw new Error('Error en la respuesta');
-      const data = await response.json();
-      setProductos(data);
-
-    } catch (error) {
-      console.error('Error al obtener los productos:', error);
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No hay token, usuario no autenticado');
     }
-  }   
-  
+    const response = await fetch(`${VITE_URL_RENDER}/api/v1/productos`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error en la respuesta: ' + response.status);
+    }
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error('La respuesta no es un array');
+    }
+
+    setProductos(data);
+  } catch (error) {
+    console.error('Error al obtener los productos:', error);
+    // Aquí puedes manejar logout o mostrar mensaje, por ejemplo:
+    // localStorage.removeItem('token');
+    // window.location.href = '/login';
+  }
+}
 
   useEffect(() => {
     fetchProductos(); 
@@ -94,6 +105,8 @@ const productosFiltrados = categoriaSeleccionada
 const actualizarStock = async (productoId, nuevoStock) => {
   try {
     const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token');
+
     const res = await fetch(`${VITE_URL_RENDER}/api/v1/productos/${productoId}`, {
       method: 'PUT',
       headers: {
@@ -104,6 +117,11 @@ const actualizarStock = async (productoId, nuevoStock) => {
     });
 
     if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
       throw new Error('Error al actualizar el stock');
     }
 
@@ -112,7 +130,6 @@ const actualizarStock = async (productoId, nuevoStock) => {
     console.error(err);
   }
 };
-
 
 
     return (
