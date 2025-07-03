@@ -69,7 +69,7 @@ const MostrarProductos = ({ recargar }) => {
       },
     });
 
-    const text = await response.text(); // leer como texto para debug
+    const text = await response.text(); 
     console.log('Respuesta cruda:', text);
 
     if (!response.ok) {

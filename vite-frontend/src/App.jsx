@@ -27,7 +27,7 @@ function App() {
     setRecargar(prev => !prev);
   };
 
-  // Actualizar token cuando se loguee o desloguee
+  
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     setToken(savedToken);
@@ -37,25 +37,25 @@ function App() {
     <BrowserRouter>
       <MenuBarra setToken={setToken} />
     <Routes>
-  {/* Ruta para login */}
+
   <Route
     path="/login"
     element={token ? <Navigate to="/productos" /> : <LoginUser setToken={setToken} />}
   />
 
-  {/* Ruta para registro */}
+ 
   <Route
     path="/register"
     element={token ? <Navigate to="/productos" /> : <RegistroUser setToken={setToken} />}
   />
 
-  {/* Ruta raíz redirige a login o productos */}
+ 
   <Route
     path="/"
     element={<Navigate to={token ? "/productos" : "/login"} />}
   />
 
-  {/* Ruta protegida */}
+
   <Route
     path="/productos"
     element={token ? (

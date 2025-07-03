@@ -21,9 +21,9 @@ const LoginUser = ({ setToken }) => {
 
       if (res.ok) {
         localStorage.setItem('token', data.token);
-        setToken(data.token);   // Actualiza el token en App.jsx
+        setToken(data.token);  
         alert('Login exitoso');
-        navigate('/productos'); // Redirige a productos
+        navigate('/productos'); 
       } else {
         alert('Error: ' + data.error);
       }

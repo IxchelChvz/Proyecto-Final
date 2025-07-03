@@ -95,12 +95,11 @@ const MenuBarra = ({ setToken }) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* Título centrado */}
+  
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
           ChefStock 👨‍🍳
         </Typography>
 
-        {/* Icono de notificaciones solo en /productos */}
         {isProductosPage && (
           <>
             <IconButton color="inherit" onClick={handleMenuOpen} aria-label="notificaciones">
@@ -124,7 +123,7 @@ const MenuBarra = ({ setToken }) => {
           </>
         )}
 
-        {/* Solo en /productos mostramos icono hamburguesa para drawer */}
+        
         {isProductosPage && (
           <>
             <IconButton
